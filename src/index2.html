@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/index.css">
+
+    <title>航班信息</title>
+</head>
+
+<body>
+    <h1>航班信息录入</h1>
+    <form id="flight-form" action="/flight" method="get">
+        <label for="flight-number">航班号：</label>
+        <input type="text" id="flight-number" name="flight_number" required><br>
+
+        <label for="start-city">起点：</label>
+        <input type="text" id="start-city" name="start_city" required><br>
+
+        <label for="end-city">终点：</label>
+        <input type="text" id="end-city" name="end_city" required><br>
+
+        <label for="departure-time">起飞时间：</label>
+        <input type="datetime-local" id="departure-time" name="departure_time" required><br>
+
+        <label for="arrival-time">到达时间：</label>
+        <input type="datetime-local" id="arrival-time" name="arrival_time" required><br>
+
+        <label for="price">票价：</label>
+        <input type="number" id="price" name="price" required><br>
+
+        <label for="discounted-tickets">折扣票数：</label>
+        <input type="number" id="discounted-tickets" name="discounted_tickets" required><br>
+
+        <label for="available-seats">剩余座位数：</label>
+        <input type="number" id="available-seats" name="available_seats" required><br>
+
+        <label for="airline">航班所属航空公司：</label>
+        <input type="text" id="airline" name="airline" required><br>
+
+        <input type="submit" value="提交" onclick="login()">
+    </form>
+    <button value="give me data" onclick="login()">get data</button>
+
+    <script src="../js/index.js"></script>
+</body>
+
+</html>

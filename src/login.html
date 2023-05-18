@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>民航票务系统</title>
+    <link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>民航票务系统</h1>
+        <form action="/login" method="post" class="login-form">
+            <div class="usermsg">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="submit-buttons">
+                <input type="submit" value="用户登录" id="user-login" class="login">
+                <input type="button" value="用户注册" id="user-signup" class="login">
+                <input type="submit" value="管理员登录" id="admin-login" class="login">
+                <input type="submit" value="确认注册" id="user-signup-confirm" class="signup">
+                <input type="button" value="返回" id="backtologin" class="signup">
+            </div>
+        </form>
+    </div>
+
+    <script src="./js/login.js"></script>
+</body>
+
+</html>

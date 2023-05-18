@@ -1,0 +1,101 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 100px auto;
+    width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-flow: column nowrap;
+
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 380px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+.submit-buttons {
+    display: flex;
+    justify-content: end;
+}
+
+.login {
+    display: inline-block;
+}
+
+.signup {
+    display: none;
+}
+
+input[type="submit"],
+input[type="button"] {
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+#user-login,
+#backtologin {
+    background-color: #66cc00;
+}
+
+#user-signup,
+#user-signup-confirm {
+    background-color: #007bff;
+}
+
+#admin-login {
+    color: black;
+    background-color: #ff1500;
+}
+
+#user-login:hover #backtologin:hover {
+    background-color: #44aa00;
+}
+
+#user-signup:hover,
+#user-signup-confirm:hover {
+    background-color: #0062cc;
+}
+
+#admin-login:hover {
+    background-color: #cc1000;
+}
