@@ -1,0 +1,115 @@
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin: 100px auto;
+    width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+label {
+    display: block;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.submit-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#user-login {
+    background-color: #007bff;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+#user-signup {
+    background-color: #28a745;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+#admin-login {
+    background-color: #dc3545;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+input[type="submit"],
+input[type="button"] {
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s, transform 0.2s;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    opacity: 0.8;
+}
+
+/* 动画效果 */
+.fade-enter {
+    opacity: 0;
+}
+
+.fade-enter-active {
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.fade-leave {
+    opacity: 1;
+}
+
+.fade-leave-active {
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.slide-enter {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.slide-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.slide-leave {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.slide-leave-active {
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.2s, transform 0.2s;
+}

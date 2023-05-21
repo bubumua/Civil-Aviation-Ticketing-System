@@ -8,6 +8,8 @@ const userLoginButton = document.getElementById('user-login');
 const adminLoginButton = document.getElementById('admin-login');
 const userSignupButton = document.getElementById('user-signup');
 const extraParamsInput = document.createElement('input');
+const loginForm = document.getElementById('login-form');
+const errorMessage = document.getElementById('errorMessage');
 
 // 设置隐藏的input元素
 extraParamsInput.type = 'hidden';
@@ -29,8 +31,8 @@ userSignupButton.addEventListener('click', function () {
 
 // 给确认密码输入框添加属性和文本
 confirmPasswordInput.type = 'password';
-confirmPasswordInput.id = 'confirm-password';
-confirmPasswordInput.name = 'confirm-password';
+confirmPasswordInput.id = 'confirm_password';
+confirmPasswordInput.name = 'confirm_password';
 confirmPasswordInput.required = true;
 confirmPasswordLabel.textContent = '确认密码';
 
@@ -65,4 +67,84 @@ signupElements[1].addEventListener('click', function () {
     signupElements.forEach(function (el) {
         el.style.display = 'none';
     });
+});
+
+// 给“用户登录”按钮添加点击监听器
+loginElements[0].addEventListener('click', (e) => {
+    e.preventDefault();
+    const username = loginForm.elements.username.value;
+    const password = loginForm.elements.password.value;
+    console.log(`Login as ${username}`);
+    fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            isAdmin: false
+        })
+    })
+        // 将响应数据解析为 JavaScript 对象
+        .then(response => response.json())
+        // 根据响应，作出不同的处理
+        .then(data => {
+            console.log(data);
+            // 若登录成功，则分情况进入用户或管理员界面
+            if (data.success) {
+                window.location.href = data.isAdmin ? '/pages/admin.html' : '/pages/user.html';
+            } else {
+                errorMessage.textContent = '❌无效的用户名或密码'; // 显示错误消息
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            errorMessage.textContent = 'An error occurred'; // 显示错误消息
+        });
+});
+
+// 给“确认注册”按钮添加事件监听器
+signupElements[0].addEventListener('click', (e) => {
+    e.preventDefault();
+    const username = loginForm.elements.username.value;
+    const password = loginForm.elements.password.value;
+    const password_confirm = loginForm.elements.confirm_password.value;
+    // 对用户的注册信息加以限制
+    if (password !== password_confirm) {
+        errorMessage.textContent = '❌确认密码与密码不符'; // 显示错误消息
+    } else if (password.trim().length < 1 || username.trim().length < 1) {
+        errorMessage.textContent = '❌用户名和密码不能为空或空格'; // 显示错误消息
+    }
+    else {
+        console.log(`Login as ${username},${password_confirm}`);
+        fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+                isAdmin: false
+            })
+        })
+            // 将响应数据解析为 JavaScript 对象
+            .then(response => response.json())
+            // 根据响应，作出不同的处理
+            .then(data => {
+                console.log(data);
+                // 若登录成功，则返回登录
+                if (data.success) {
+                    window.location.href = '/login.html';
+                    const usernameEle = document.getElementById('username');
+                    const passwordEle = document.getElementById('password');
+                    usernameEle.value = username;
+                    passwordEle.value = password;
+                    console.log(`set ${username} and ${password}`);
+                } else {
+                    errorMessage.textContent = '❌该用户名已被占用'; // 显示错误消息
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                errorMessage.textContent = 'An error occurred'; // 显示错误消息
+            });
+    }
 });

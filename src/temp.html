@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>民航票务系统登录</title>
+    <link rel="stylesheet" href="css/animation.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>民航票务系统</h1>
+        <form>
+            <div class="usermsg fade-enter-active">
+                <label for="username" class="fade-enter-active">用户名</label>
+                <input type="text" id="username" name="username" required class="fade-enter-active">
+
+                <label for="password" class="fade-enter-active">密码</label>
+                <input type="password" id="password" name="password" required class="fade-enter-active">
+
+                <label for="confirm-password" class="slide-enter">确认密码</label>
+                <input type="password" id="confirm-password" name="confirm-password" required class="slide-enter">
+            </div>
+
+            <div class="submit-buttons fade-enter-active">
+                <input type="submit" id="user-login" value="用户登录" class="login slide-enter">
+                <input type="button" value="用户注册" class="login slide-enter">
+                <input type="submit" id="admin-login" value="管理员登录" class="login slide-enter">
+                <input type="submit" id="user-signup" value="确认注册" class="signup fade-enter">
+                <input type="button" value="返回" class="signup fade-enter">
+            </div>
+        </form>
+    </div>
+
+    <script src="./js/animation.js"></script>
+</body>
+
+</html>

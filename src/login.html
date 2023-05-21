@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <h1>民航票务系统</h1>
-        <form action="/login" method="post" class="login-form">
+        <form id="login-form" class="login-form">
             <div class="usermsg">
                 <label for="username">用户名</label>
                 <input type="text" id="username" name="username" required>
@@ -20,6 +20,7 @@
                 <label for="password">密码</label>
                 <input type="password" id="password" name="password" required>
             </div>
+            <p id="errorMessage"></p>
             <div class="submit-buttons">
                 <input type="submit" value="用户登录" id="user-login" class="login">
                 <input type="button" value="用户注册" id="user-signup" class="login">
