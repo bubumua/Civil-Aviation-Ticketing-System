@@ -1,15 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADMIN</title>
+    <title>民航票务管理系统 - 管理员页面</title>
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 
 <body>
-    <h1>管理员界面</h1>
+    <header>
+        <h1>民航票务管理系统</h1>
+        <div class="user-info">
+            <span class="user-type" id="usertype">管理员</span>
+            <span class="username" id="username">Admin</span>
+        </div>
+    </header>
+
+    <main>
+        <form id="flight_form" class="flight_form">
+            <h2>航班信息</h2>
+            <label for="start_to_seartch">起点</label>
+            <input type="text" id="start_to_seartch" name="start_to_seartch">
+            <label for="end_to_seartch">终点</label>
+            <input type="text" id="end_to_seartch" name="end_to_seartch">
+            <label for="departure_order">起飞时间</label>
+            <select name="departure_order" id="departure_order" aria-label="结果排序">
+                <option value="ASC" selected>升序</option>
+                <option value="DESC">降序</option>
+            </select>
+            <label for="arrival_order">到达时间</label>
+            <select name="arrival_order" id="arrival_order" aria-label="结果排序">
+                <option value="ASC" selected>升序</option>
+                <option value="DESC">降序</option>
+            </select>
+            <div class="table_container">
+                <table id="flight_table">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>航班号</th>
+                            <th>出发城市</th>
+                            <th>到达城市</th>
+                            <th>出发日期</th>
+                            <th>出发时间</th>
+                            <th>到达日期</th>
+                            <th>到达时间</th>
+                            <th>价格</th>
+                            <th>优惠票数量</th>
+                            <th>折扣</th>
+                            <th>余票数量</th>
+                            <th>航空公司</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 航班信息 -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-buttons">
+                <input type="button" value="新增">
+                <input type="button" value="修改">
+                <input type="button" value="删除">
+                <input type="button" value="查询">
+            </div>
+        </form>
+    </main>
+
+    <p class="console" id="message"></p>
+
+    <script src="../js/admin.js"></script>
 </body>
 
 </html>

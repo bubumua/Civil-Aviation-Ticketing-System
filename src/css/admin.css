@@ -1,0 +1,160 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: Arial, sans-serif;
+}
+
+header {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.user-info {
+    font-size: 16px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-type {
+    font-weight: bold;
+}
+
+.username {
+    margin-left: 10px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.flight_form {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 95%;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.table_container {
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+.table_container>table>thead {
+    position: sticky;
+    top: 0px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+thead th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.selected {
+    background-color: #d9edf7;
+}
+
+tbody td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+tbody td:first-child,
+thead th:first-child {
+    width: 25px;
+}
+
+.form-buttons {
+    margin: 10px 0px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+input[type="button"] {
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    padding: 10px 20px;
+    margin-left: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+input[type="button"]:hover {
+    background-color: #0062cc;
+}
+
+.add_flight_form {
+    width: 100%;
+    padding: 0px;
+}
+
+.add_flight_form h2 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.add_flight_form input[type='number'] {
+    width: 50px;
+}
+
+.add_flight_form input[type='text'] {
+    width: 100px;
+}
+
+.console {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    display: inline-block;
+    justify-self: center;
+    text-align: center;
+}
+
+#addConfirmBtn {
+    margin: 0px;
+    border-radius: 0px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#addCancelBtn {
+    margin: 0px;
+    border-radius: 0px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

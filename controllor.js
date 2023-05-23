@@ -1,18 +1,18 @@
+const session = require('express-session');
 const mysql = require('mysql');
-
 
 const TableUsers = 'users';
 
-function connectMysql() {
+function connectMysql(databaseName) {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
         password: 'root',
-        database: 'CATS'
+        database: databaseName
     });
     connection.connect((err) => {
         if (err) { throw err; }
-        console.log('Successfully connect to MySQL server!');
+        console.log(`Successfully connect to MySQL server! Use database: ${databaseName}`);
     });
     return connection;
 }
@@ -24,71 +24,16 @@ function disconnectMysql(connection) {
     });
 }
 
-function databaseExist(connection, databaseName) {
-    connection.query('SHOW DATABASES', (err, results) => {
-        if (err) throw err;
-        const databaseExists = results.some((result) => result.Database === databaseName);
-        if (databaseExists) {
-            console.log(`Database ${databaseName} already exists`);
-            return true;
-        } else {
-            console.log(`Database ${databaseName} does not exist`);
-            return false;
-        }
-    });
-}
-
-function tableExist(connection, tableName) {
-    return new Promise((resolve, reject) => {
-        connection.query(`SHOW TABLES LIKE '${tableName}'`, (err, results) => {
-            if (err) reject(err);
-            const tableExists = results.length > 0;
-            if (tableExists) {
-                console.log(`Table ${tableName} already exists`);
-                resolve(true);
-            } else {
-                console.log(`Table ${tableName} does not exist`);
-                resolve(false);
-            }
-        });
-    });
-}
-
 module.exports = {
     async login(req, res) {
+        // 接收前端传来的数据
         console.log(`req.body=`, req.body);
         const user = {
             username: req.body.username,
-            password: req.body.password,
-            balance: 0,
-            isAdmin: Boolean(req.body.isAdmin)
+            password: req.body.password
         }
-        const connection = connectMysql();
-        // 如果用户表不存在，则创建并插入管理员用户
-        if (!tableExist(connection, TableUsers)) {
-            console.log('Table users creating');
-            let sql = `CREATE TABLE users (
-                            username VARCHAR(255) UNIQUE PRIMARY KEY,
-                            password VARCHAR(255),
-                            balance FLOAT CHECK(balance>=0),
-                            isAdmin BOOLEAN
-                        );
-                        INSERT INTO users VALUES ('admin','admin',99999,1);
-                        INSERT INTO users VALUES ('a','a',0,1);`;
-            // 将数据库操作封装成 Promise 对象
-            const createTablePromise = new Promise((resolve, reject) => {
-                connection.query(sql, (err, result) => {
-                    if (err) reject(err);
-                    else resolve(result);
-                });
-            });
-            try {
-                await createTablePromise; // 等待 Promise 对象完成
-                console.log('Table users created');
-            } catch (err) {
-                console.error(err);
-            }
-        }
+        const connection = connectMysql('CATS');
+
         // 查询用户表中是否存在该用户
         let sql = `SELECT * FROM users WHERE username = '${user.username}' AND password='${user.password}'`;
         const selectUserPromise = new Promise((resolve, reject) => {
@@ -101,17 +46,19 @@ module.exports = {
             let response = {
                 success: true,
                 username: user.username,
-                isAdmin: false,
-                statusCode: 100
+                isAdmin: false
             };
             // 如果查询到，则返回成功
             if (results.length > 0) {
-                console.log(`User ${user.username} exists:`, results[0], results[0].isAdmin ? 'this is admin' : 'this is not admin');
+                console.log(`User ${user.username} exists:`,
+                    results[0],
+                    results[0].isAdmin ? 'this is admin' : 'this is not admin');
                 response.isAdmin = results[0].isAdmin;
-            } else {
+            }
+            // 如果没有查询到，则返回失败
+            else {
                 console.log(`User ${user.username} does not exists!`);
                 response.success = false;
-                response.statusCode = 200;
             }
             disconnectMysql(connection);
             res.send(response);
@@ -124,38 +71,16 @@ module.exports = {
     ,
     async signup(req, res) {
         console.log(`req.body=${req.body}`);
+        // 接收前端传来的数据
         const user = {
             username: req.body.username,
             password: req.body.password,
             balance: 0,
             isAdmin: Boolean(req.body.isAdmin)
         }
-        const connection = connectMysql();
-        // 如果用户表不存在，则创建并插入管理员用户
-        if (!tableExist(connection, TableUsers)) {
-            console.log('Table users creating');
-            let sql = `CREATE TABLE users (
-                            username VARCHAR(255) UNIQUE PRIMARY KEY,
-                            password VARCHAR(255),
-                            balance FLOAT CHECK(balance>=0),
-                            isAdmin BOOLEAN
-                        );
-                        INSERT INTO users VALUES (admin,admin,99999,1),
-                        INSERT INTO users VALUES (a,a,0,1)`;
-            // 将数据库操作封装成 Promise 对象
-            const createTablePromise = new Promise((resolve, reject) => {
-                connection.query(sql, (err, result) => {
-                    if (err) reject(err);
-                    else resolve(result);
-                });
-            });
-            try {
-                await createTablePromise; // 等待 Promise 对象完成
-                console.log('Table users created');
-            } catch (err) {
-                console.error(err);
-            }
-        }
+        // 连接数据库
+        const connection = connectMysql('CATS');
+
         // 查询用户表中是否存在该用户
         let sql = `SELECT * FROM users WHERE username = '${user.username}'`;
         const selectUserPromise = new Promise((resolve, reject) => {
@@ -168,14 +93,12 @@ module.exports = {
             const results = await selectUserPromise; // 等待 Promise 对象完成
             let response = {
                 success: true,
-                username: user.username,
-                statusCode: 100
+                username: user.username
             };
             // 如果查询到，则返回成功
             if (results.length > 0) {
                 console.log('User already exists:', results[0]);
                 response.success = false;
-                response.statusCode = 200;
             }
             // 若没查询到，插入该用户
             else {
@@ -194,7 +117,6 @@ module.exports = {
                     console.error(err);
                 }
                 response.success = true;
-                response.statusCode = 100;
             }
             disconnectMysql(connection);
             res.send(response);
@@ -203,6 +125,122 @@ module.exports = {
             disconnectMysql(connection);
             res.status(500).send('Internal Server Error');
         }
+    }
+    ,
+    async addFlight(req, res) {
+        // 连接数据库
+        const connection = connectMysql('CATS');
+        console.log(`req.body=`, req.body);
+        // 向航班信息表flights中插入数据
+        let sql = `INSERT INTO flights SET ?;`;
+
+        // 定义响应数据
+        let resData = {
+            success: true,
+            msg: ''
+        }
+
+        const promises = [];
+        for (const newFlight of req.body) {
+            const promise = new Promise((resolve, reject) => {
+                connection.query(sql, newFlight, (err, results) => {
+                    if (err) reject(err);
+                    else resolve(results);
+                });
+            });
+            promises.push(promise);
+        }
+
+        Promise.all(promises).then((results) => {
+            console.log('insert successfully: ', results);
+            resData.success = true;
+            resData.msg = 'Insert finished.';
+            disconnectMysql(connection);
+            res.send(resData);
+        }).catch((err) => {
+            console.error(err);
+            console.log(err.sqlMessage);
+            resData.success = false;
+            resData.msg = 'Insert Error!';
+            res.status(500).send(resData);
+        });
+    }
+    ,
+    async queryFlight(req, res) {
+        // 连接数据库
+        const connection = connectMysql('CATS');
+        console.log(`req.body=`, req.body);
+        // 获取查询条件
+        const start_city = req.body.start_city;
+        const end_city = req.body.end_city;
+        const departure_order = req.body.departure_order;
+        const arrival_order = req.body.arrival_order;
+
+        // 定义响应数据
+        let resData = {
+            success: true,
+            msg: '',
+            queryRes: {}
+        }
+
+        // 向航班信息表flights中查询数据
+        let sql = `SELECT * FROM flights WHERE start_city LIKE '%${start_city}%' AND end_city LIKE '%${end_city}%' ORDER BY departure_date ${departure_order},departure_time ${departure_order}, arrival_date ${arrival_order},arrival_time ${arrival_order};`;
+        const queryFlightPromise = new Promise((resolve, reject) => {
+            connection.query(sql, (err, results) => {
+                if (err) reject(err);
+                else resolve(results);
+            });
+        });
+        queryFlightPromise.then((results => {
+            // console.log(results);
+            resData.queryRes = results;
+            resData.msg = 'Query finished.';
+            disconnectMysql(connection);
+            res.send(resData);
+        })).catch((err) => {
+            console.error(err);
+            console.log(err.sqlMessage);
+            resData.success = false;
+            resData.msg = 'Query Error!';
+            res.status(500).send(resData);
+        });
+    }
+    ,
+    async deleteFlight(req, res) {
+        // 连接数据库
+        const connection = connectMysql('CATS');
+        console.log(`req.body=`, req.body);
+
+        // 定义响应数据
+        let resData = {
+            success: true,
+            msg: ''
+        }
+
+        // 获取要删除的航班号
+        const deletedFlights = req.body;
+        const sql = `DELETE FROM flights WHERE flight IN (${deletedFlights.map(() => '?').join(', ')})`;
+        const deleteFlightPromise = new Promise((resolve, reject) => {
+            connection.query(sql, deletedFlights, (error, results) => {
+                if (error) reject(error);
+                else {
+                    resolve(results);
+                    console.log(`Deleted ${results.affectedRows} rows.`)
+                };
+            });
+        });
+        deleteFlightPromise.then((results => {
+            // console.log(results);
+            resData.msg = 'Delete finished.';
+            disconnectMysql(connection);
+            res.send(resData);
+        })).catch((err) => {
+            console.error(err);
+            console.log(err.sqlMessage);
+            resData.success = false;
+            resData.msg = 'Delete Error!';
+            res.status(500).send(resData);
+        });
     }
 }
 

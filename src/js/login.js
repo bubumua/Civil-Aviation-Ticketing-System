@@ -80,17 +80,21 @@ loginElements[0].addEventListener('click', (e) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             username: username,
-            password: password,
-            isAdmin: false
+            password: password
         })
     })
         // 将响应数据解析为 JavaScript 对象
         .then(response => response.json())
         // 根据响应，作出不同的处理
         .then(data => {
-            console.log(data);
+            console.log('response data =', data);
             // 若登录成功，则分情况进入用户或管理员界面
             if (data.success) {
+                const user = {
+                    username: username,
+                    isAdmin: data.isAdmin
+                }
+                document.cookie = `user=${JSON.stringify(user)}; path=/`;
                 window.location.href = data.isAdmin ? '/pages/admin.html' : '/pages/user.html';
             } else {
                 errorMessage.textContent = '❌无效的用户名或密码'; // 显示错误消息
