@@ -23,16 +23,23 @@
             <input type="text" id="start_to_seartch" name="start_to_seartch">
             <label for="end_to_seartch">终点</label>
             <input type="text" id="end_to_seartch" name="end_to_seartch">
-            <label for="departure_order">起飞时间</label>
-            <select name="departure_order" id="departure_order" aria-label="结果排序">
-                <option value="ASC" selected>升序</option>
-                <option value="DESC">降序</option>
+            <!-- 结果排序 -->
+            <label for="first_order">第一次序</label>
+            <select name="first_order" id="first_order" aria-label="第一次序">
+                <option value="departure_date ASC,departure_time ASC" selected>起飞时间升序</option>
+                <option value="departure_date DESC,departure_time DESC">起飞时间降序</option>
+                <option value="arrival_date ASC,arrival_time ASC">到达时间升序</option>
+                <option value="arrival_date DESC,arrival_time DESC">到达时间降序</option>
             </select>
-            <label for="arrival_order">到达时间</label>
-            <select name="arrival_order" id="arrival_order" aria-label="结果排序">
-                <option value="ASC" selected>升序</option>
-                <option value="DESC">降序</option>
+            <label for="second_order">第二次序</label>
+            <select name="second_order" id="second_order" aria-label="第二次序">
+                <option value="" selected>无</option>
+                <option value="departure_date ASC,departure_time ASC">起飞时间升序</option>
+                <option value="departure_date DESC,departure_time DESC">起飞时间降序</option>
+                <option value="arrival_date ASC,arrival_time ASC">到达时间升序</option>
+                <option value="arrival_date DESC,arrival_time DESC">到达时间降序</option>
             </select>
+
             <div class="table_container">
                 <table id="flight_table">
                     <thead>

@@ -1,5 +1,3 @@
-// const { copy } = require("../../router");
-
 function generateFlightsData(number = 3) {
     const cities = ['北京', '上海', '广州', '深圳', '成都', '杭州', '南京', '苏州', '天津', '西安', '芜湖', '合肥', '哈尔滨', '乌鲁木齐', '厦门'];
     const airlines = ['中国国际航空', '东方航空', '南方航空', '海南航空', '厦门航空', '春秋航空'];
@@ -33,7 +31,7 @@ function generateFlightsData(number = 3) {
         for (let i = 0; i < letter_number; i++) {
             flight += String.fromCharCode(65 + Math.floor(Math.random() * 26));
         }
-        flight += Math.floor(100 + Math.random() * 10000).toString();
+        flight += Math.floor(100 + Math.random() * 1000).toString();
 
         random_flights.push({
             flight: flight,
@@ -287,14 +285,15 @@ function queryAndRefresh(queryCondition) {
 function handleQueryButtonClick() {
     const start = flight_form.elements.start_to_seartch.value;
     const end = flight_form.elements.end_to_seartch.value;
-    const departure_order = flight_form.elements.departure_order.value;
-    const arrival_order = flight_form.elements.arrival_order.value;
+    const first_order = flight_form.elements.first_order.value;
+    const second_order = flight_form.elements.second_order.value;
     const queryCondition = {
         start_city: start,
         end_city: end,
-        departure_order: departure_order,
-        arrival_order: arrival_order
+        first_order: first_order,
+        second_order: second_order
     }
+    console.log(queryCondition);
     queryAndRefresh(queryCondition);
 };
 
@@ -343,12 +342,37 @@ function handleUpdateConfirmButton() {
 
     // 生成待更新航班数组
     let updatedFlights = [];
-    rows.forEach((row) => {
-        const flight = row.getElementsByTagName("td")[1].innerHTML.trim();
-        if (checkbox.checked) {
-            deletedFlights.push(flight);
-        }
+    update_rows.forEach((row) => {
+        const inputs = row.querySelectorAll('input');
+        let flightCell = {};
+        inputs.forEach((cell) => {
+            flightCell[cell.name] = cell.value;
+        })
+        updatedFlights.push(flightCell);
     });
+    // console.log(updatedFlights);
+    // 发送数据
+    fetch('/updateFlight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedFlights)
+    })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                console.log('response data =', data);
+                handleQueryButtonClick();
+            }
+            else {
+                console.log('Delete fail!');
+                showMessage('修改失败！');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+            showMessage('修改异常！');
+        });
+
 }
 
 function handleUpdateButtonClick() {
@@ -415,8 +439,8 @@ function handleUpdateButtonClick() {
             const copyRow = updateTableTbody.insertRow();
 
             const td1 = row.getElementsByTagName("td")[1].innerHTML.trim();
-            // copyRow.insertCell().innerHTML = `<input type="text" id="flight_number" name="flight_number" value="${td1}" required>`;
-            copyRow.insertCell().innerHTML = `${td1}`;
+            copyRow.insertCell().innerHTML = `<input type="text" id="flight_number" name="flight" value="${td1}" required readOnly>`;
+            // copyRow.insertCell().innerHTML = `${td1}`;
 
             const td2 = row.getElementsByTagName("td")[2].innerHTML.trim();
             copyRow.insertCell().innerHTML = `<input type="text" id="start_city" name="start_city" value="${td2}" required>`;

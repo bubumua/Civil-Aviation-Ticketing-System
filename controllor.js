@@ -150,7 +150,6 @@ module.exports = {
             });
             promises.push(promise);
         }
-
         Promise.all(promises).then((results) => {
             console.log('insert successfully: ', results);
             resData.success = true;
@@ -169,12 +168,14 @@ module.exports = {
     async queryFlight(req, res) {
         // 连接数据库
         const connection = connectMysql('CATS');
-        console.log(`req.body=`, req.body);
+        // console.log(`req.body=`, req.body);
         // 获取查询条件
         const start_city = req.body.start_city;
         const end_city = req.body.end_city;
-        const departure_order = req.body.departure_order;
-        const arrival_order = req.body.arrival_order;
+        const first_order = req.body.first_order;
+        const second_order = req.body.second_order;
+        let orderCondition = first_order;
+        orderCondition += second_order.length > 0 ? `, ${second_order}` : '';
 
         // 定义响应数据
         let resData = {
@@ -184,7 +185,7 @@ module.exports = {
         }
 
         // 向航班信息表flights中查询数据
-        let sql = `SELECT * FROM flights WHERE start_city LIKE '%${start_city}%' AND end_city LIKE '%${end_city}%' ORDER BY departure_date ${departure_order},departure_time ${departure_order}, arrival_date ${arrival_order},arrival_time ${arrival_order};`;
+        let sql = `SELECT * FROM flights WHERE start_city LIKE '%${start_city}%' AND end_city LIKE '%${end_city}%' ORDER BY ${orderCondition};`;
         const queryFlightPromise = new Promise((resolve, reject) => {
             connection.query(sql, (err, results) => {
                 if (err) reject(err);
@@ -241,6 +242,49 @@ module.exports = {
             resData.msg = 'Delete Error!';
             res.status(500).send(resData);
         });
+    }
+    ,
+    async updateFlight(req, res) {
+        // 连接数据库
+        const connection = connectMysql('CATS');
+        console.log(`req.body=`, req.body);
+
+        // 定义响应数据
+        let resData = {
+            success: true,
+            msg: ''
+        }
+
+        // 获取要删除的航班号
+        const updatedFlights = req.body;
+        const sql = `UPDATE flights SET start_city = ?, end_city = ?, departure_date = ?, departure_time = ?, arrival_date = ?, arrival_time = ?, price = ?, discounted_tickets = ?, discount = ?, rest_tickets = ?, airline = ? WHERE flight = ?`;
+        // 创建Promise组
+        const promises = [];
+        for (const flight of updatedFlights) {
+            const up = [flight.start_city, flight.end_city, flight.departure_date, flight.departure_time, flight.arrival_date, flight.arrival_time, flight.price, flight.discounted_tickets, flight.discount, flight.rest_tickets, flight.airline, flight.flight]
+            const updateFlightPromise = new Promise((resolve, reject) => {
+                connection.query(sql, up, (error, results) => {
+                    if (error) reject(error);
+                    else resolve(results);
+                });
+            });
+            promises.push(updateFlightPromise);
+        }
+        Promise.all(promises).then((results) => {
+            console.log('update successfully: ', results);
+            resData.success = true;
+            resData.msg = 'Update finished.';
+            disconnectMysql(connection);
+            res.send(resData);
+        }).catch((err) => {
+            console.error(err);
+            console.log(err.sqlMessage);
+            resData.success = false;
+            resData.msg = 'Update Error!';
+            res.status(500).send(resData);
+        });
+
+
     }
 }
 

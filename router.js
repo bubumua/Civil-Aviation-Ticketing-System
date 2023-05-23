@@ -11,6 +11,7 @@ expressRouter.post('/signup', controllor.signup);
 expressRouter.post('/addFlight', controllor.addFlight);
 expressRouter.post('/queryFlight', controllor.queryFlight);
 expressRouter.post('/deleteFlight', controllor.deleteFlight);
+expressRouter.post('/updateFlight', controllor.updateFlight);
 
 // expressRouter.get('/flight', cors(), controllor.login);
 
