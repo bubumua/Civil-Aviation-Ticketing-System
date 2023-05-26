@@ -525,17 +525,17 @@ flight_form.addEventListener("click", () => {
     updateBtn.disabled = true;
 });
 
-// 监听新增按钮的点击事件
-addBtn.addEventListener('click', handleAddButtonClick);
-
 // 监听查询按钮
 queryBtn.addEventListener('click', handleQueryButtonClick);
 
+// 监听新增按钮的点击事件
+// addBtn.addEventListener('click', handleAddButtonClick);
+
 // 监听删除按钮
-deleteBtn.addEventListener('click', handleDeleteButtonClick);
+// deleteBtn.addEventListener('click', handleDeleteButtonClick);
 
 // 监听修改按钮
-updateBtn.addEventListener('click', handleUpdateButtonClick);
+// updateBtn.addEventListener('click', handleUpdateButtonClick);
 
 // 获取cookie
 const cookies = document.cookie.split(';');

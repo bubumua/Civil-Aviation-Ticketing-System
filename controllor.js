@@ -173,9 +173,10 @@ module.exports = {
         const start_city = req.body.start_city;
         const end_city = req.body.end_city;
         const first_order = req.body.first_order;
-        const second_order = req.body.second_order;
+        // const second_order = req.body.second_order;
         let orderCondition = first_order;
-        orderCondition += second_order.length > 0 ? `, ${second_order}` : '';
+        // orderCondition += second_order.length > 0 ? `,${second_order}` : '';
+
 
         // 定义响应数据
         let resData = {
@@ -186,6 +187,7 @@ module.exports = {
 
         // 向航班信息表flights中查询数据
         let sql = `SELECT * FROM flights WHERE start_city LIKE '%${start_city}%' AND end_city LIKE '%${end_city}%' ORDER BY ${orderCondition};`;
+        console.log('queryCondition=', sql);
         const queryFlightPromise = new Promise((resolve, reject) => {
             connection.query(sql, (err, results) => {
                 if (err) reject(err);
