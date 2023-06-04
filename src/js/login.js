@@ -5,7 +5,7 @@ const confirmPasswordLabel = document.createElement('label');
 const confirmPasswordInput = document.createElement('input');
 const form = document.querySelector('.login-form');
 const userLoginButton = document.getElementById('user-login');
-const adminLoginButton = document.getElementById('admin-login');
+// const adminLoginButton = document.getElementById('admin-login');
 const userSignupButton = document.getElementById('user-signup');
 const extraParamsInput = document.createElement('input');
 const loginForm = document.getElementById('login-form');
@@ -22,9 +22,9 @@ form.appendChild(extraParamsInput);
 userLoginButton.addEventListener('click', function () {
     extraParamsInput.value = 'false';
 });
-adminLoginButton.addEventListener('click', function () {
-    extraParamsInput.value = 'true';
-});
+// adminLoginButton.addEventListener('click', function () {
+//     extraParamsInput.value = 'true';
+// });
 userSignupButton.addEventListener('click', function () {
     extraParamsInput.value = 'false';
 });
@@ -142,13 +142,16 @@ signupElements[0].addEventListener('click', (e) => {
                     usernameEle.value = username;
                     passwordEle.value = password;
                     console.log(`set ${username} and ${password}`);
-                } else {
-                    errorMessage.textContent = '❌该用户名已被占用'; // 显示错误消息
+                }
+                // 否则显示登录失败消息
+                else {
+                    errorMessage.textContent = '❌该用户名已被占用';
                 }
             })
+            // 若后端故障，显示错误消息
             .catch(error => {
                 console.error(error);
-                errorMessage.textContent = 'An error occurred'; // 显示错误消息
+                errorMessage.textContent = 'An error occurred';
             });
     }
 });

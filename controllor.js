@@ -66,7 +66,7 @@ module.exports = {
             console.error(err);
             disconnectMysql(connection);
             res.status(500).send('Internal Server Error');
-        })
+        });
     }
     ,
     async signup(req, res) {
@@ -90,17 +90,18 @@ module.exports = {
             });
         });
         try {
-            const results = await selectUserPromise; // 等待 Promise 对象完成
+            // 等待 Promise 对象完成
+            const results = await selectUserPromise;
             let response = {
                 success: true,
                 username: user.username
             };
-            // 如果查询到，则返回成功
+            // 如果查询到，则返回失败
             if (results.length > 0) {
                 console.log('User already exists:', results[0]);
                 response.success = false;
             }
-            // 若没查询到，插入该用户
+            // 若没查询到，插入该用户，返回成功
             else {
                 console.log('User does not exists.');
                 let sql = 'INSERT INTO users SET ?';
@@ -111,7 +112,8 @@ module.exports = {
                     });
                 });
                 try {
-                    await insertUserPromise; // 等待 Promise 对象完成
+                    // 等待 Promise 对象完成
+                    await insertUserPromise;
                     console.log('User inserted!');
                 } catch (err) {
                     console.error(err);
@@ -131,8 +133,6 @@ module.exports = {
         // 连接数据库
         const connection = connectMysql('CATS');
         console.log(`req.body=`, req.body);
-        // 向航班信息表flights中插入数据
-        let sql = `INSERT INTO flights SET ?;`;
 
         // 定义响应数据
         let resData = {
@@ -140,6 +140,8 @@ module.exports = {
             msg: ''
         }
 
+        // 向航班信息表flights中插入数据
+        let sql = `INSERT INTO flights SET ?;`;
         const promises = [];
         for (const newFlight of req.body) {
             const promise = new Promise((resolve, reject) => {
@@ -257,7 +259,7 @@ module.exports = {
             msg: ''
         }
 
-        // 获取要删除的航班号
+        // 获取要修改的航班号
         const updatedFlights = req.body;
         const sql = `UPDATE flights SET start_city = ?, end_city = ?, departure_date = ?, departure_time = ?, arrival_date = ?, arrival_time = ?, price = ?, discounted_tickets = ?, discount = ?, rest_tickets = ?, airline = ? WHERE flight = ?`;
         // 创建Promise组
